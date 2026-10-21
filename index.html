@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="bn">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10131c">
+  <title>RYNTRIQ — Video Prompt Studio</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1018;
+      --panel: #151a25;
+      --panel2: #1b2230;
+      --line: #293243;
+      --text: #f3f5fb;
+      --muted: #98a3b7;
+      --lime: #c8f36a;
+      --lav: #a99aff;
+      --danger: #ff7b87
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at 85% 0%, #252345 0, transparent 36%), var(--bg);
+      color: var(--text);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: 100vh
+    }
+
+    .shell {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 26px 18px 52px
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 34px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      font-size: 13px
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--lime);
+      color: #11151b;
+      display: grid;
+      place-items: center;
+      font-size: 17px
+    }
+
+    .badge {
+      font-size: 12px;
+      color: #d3caff;
+      background: #a99aff1a;
+      border: 1px solid #a99aff42;
+      border-radius: 99px;
+      padding: 6px 10px
+    }
+
+    .eyebrow {
+      color: var(--lime);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 11px;
+      font-weight: 750
+    }
+
+    .hero h1 {
+      font-size: clamp(31px, 7vw, 48px);
+      line-height: 1.06;
+      letter-spacing: -.045em;
+      margin: 10px 0 12px
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 530px;
+      margin: 0
+    }
+
+    .specs {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin: 22px 0 25px
+    }
+
+    .spec {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      background: #ffffff08;
+      border: 1px solid var(--line);
+      padding: 7px 11px;
+      border-radius: 99px;
+      color: #d8deeb;
+      font-size: 12px
+    }
+
+    .spec b {
+      color: var(--lime);
+      font-weight: 700
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 27px 0 12px
+    }
+
+    .section-head h2 {
+      font-size: 16px;
+      margin: 0
+    }
+
+    .counter {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .counter strong {
+      color: var(--text)
+    }
+
+    .cards {
+      display: grid;
+      gap: 11px
+    }
+
+    .card {
+      background: linear-gradient(145deg, #191f2c, #141923);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 15px;
+      transition: border-color .2s
+    }
+
+    .card:focus-within {
+      border-color: #8e82e0
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px
+    }
+
+    .card-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 13px
+    }
+
+    .num {
+      height: 25px;
+      width: 25px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #c8f36a20;
+      color: var(--lime);
+      font-size: 12px
+    }
+
+    .duration {
+      font-size: 11px;
+      color: #c7c2ff;
+      background: #a99aff16;
+      border-radius: 99px;
+      padding: 4px 8px
+    }
+
+    .card textarea {
+      width: 100%;
+      min-height: 72px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      line-height: 1.55;
+      padding: 1px 0
+    }
+
+    .card textarea::placeholder {
+      color: #69758a
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #ffffff0b;
+      padding-top: 9px
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted)
+    }
+
+    .chars {
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      color: var(--muted)
+    }
+
+    .chars.over {
+      color: var(--danger)
+    }
+
+    .remove {
+      border: 0;
+      background: none;
+      color: #8490a4;
+      font-size: 12px;
+      padding: 4px 0 4px 9px;
+      cursor: pointer
+    }
+
+    .remove:hover {
+      color: var(--danger)
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px
+    }
+
+    .add {
+      border: 1px solid #3a465c;
+      color: #edf0f8;
+      background: #171d29;
+      border-radius: 11px;
+      padding: 10px 14px;
+      font: 600 13px inherit;
+      cursor: pointer
+    }
+
+    .add:disabled {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    .limit-note {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right
+    }
+
+    .runbox {
+      margin-top: 28px;
+      padding: 17px;
+      border: 1px solid #3b465a;
+      background: #171d29;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px
+    }
+
+    .run-copy strong {
+      display: block;
+      font-size: 14px
+    }
+
+    .run-copy span {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .run {
+      border: 0;
+      border-radius: 12px;
+      background: var(--lime);
+      color: #13170e;
+      padding: 12px 19px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap
+    }
+
+    .run:disabled {
+      opacity: .42;
+      cursor: not-allowed
+    }
+
+    .status {
+      display: none;
+      margin-top: 13px;
+      border-radius: 13px;
+      padding: 12px 14px;
+      font-size: 13px
+    }
+
+    .status.show {
+      display: block
+    }
+
+    .status.ok {
+      border: 1px solid #93c84055;
+      background: #c8f36a10;
+      color: #d7f69d
+    }
+
+    .status.error {
+      border: 1px solid #ff7b8755;
+      background: #ff7b8710;
+      color: #ffb8be
+    }
+
+    .status.info {
+      border: 1px solid #a99aff50;
+      background: #a99aff10;
+      color: #ded8ff
+    }
+
+    .pair-panel {
+      display: none;
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid #7768c8;
+      background: linear-gradient(140deg, #211f39, #181d2a);
+      border-radius: 18px
+    }
+
+    .pair-panel.show {
+      display: block
+    }
+
+    .pair-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .pair-head h2 {
+      font-size: 20px;
+      margin: 0 0 5px
+    }
+
+    .pair-head p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0
+    }
+
+    .pair-tag {
+      font-size: 11px;
+      color: #d8d1ff;
+      background: #a99aff1c;
+      border: 1px solid #a99aff45;
+      padding: 5px 8px;
+      border-radius: 99px;
+      white-space: nowrap
+    }
+
+    .qr-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0 12px;
+      flex-wrap: wrap
+    }
+
+    .qr-frame {
+      background: white;
+      border-radius: 14px;
+      padding: 12px;
+      min-width: 200px;
+      min-height: 200px;
+      display: grid;
+      place-items: center
+    }
+
+    .qr-frame img {
+      display: block;
+      max-width: 180px;
+      height: auto
+    }
+
+    .qr-instructions {
+      font-size: 13px;
+      color: #dce1ec;
+      max-width: 390px
+    }
+
+    .qr-instructions strong {
+      color: white
+    }
+
+    .code-box {
+      margin-top: 12px;
+      background: #11151f;
+      border: 1px solid #323b4e;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .code-display {
+      font-family: monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--lime);
+      letter-spacing: 3px
+    }
+
+    .copy-code-btn {
+      background: #a99aff20;
+      border: 1px solid #a99aff50;
+      color: #d8d1ff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer
+    }
+
+    .steps {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 9px
+    }
+
+    .steps li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #dce1ec;
+      font-size: 13px
+    }
+
+    .step-num {
+      flex: 0 0 21px;
+      height: 21px;
+      border-radius: 7px;
+      background: #a99aff24;
+      color: #c9c0ff;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700
+    }
+
+    .pair-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px
+    }
+
+    .secondary {
+      border: 1px solid #454f63;
+      background: transparent;
+      color: #e7eaf2;
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-weight: 650;
+      cursor: pointer
+    }
+
+    .footer {
+      margin-top: 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: #7f8a9d;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      background: #252d3b;
+      border: 1px solid #46516a;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      transition: .2s;
+      max-width: 90vw
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1
+    }
+
+    @media(max-width:500px) {
+      .shell {
+        padding: 20px 14px 40px
+      }
+
+      .top {
+        margin-bottom: 28px
+      }
+
+      .runbox {
+        align-items: stretch;
+        flex-direction: column
+      }
+
+      .run {
+        width: 100%;
+        padding: 14px
+      }
+
+      .footer {
+        flex-direction: column
+      }
+
+      .card {
+        padding: 13px
+      }
+
+      .hero p {
+        font-size: 14px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">✦</div><span>RYNTRIQ</span>
+      </div><span class="badge">VIDEO PROMPT STUDIO</span>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">তোমার পরের ভিডিও এখান থেকে</div>
+      <h1>একটি prompt.<br>একটি ৫ সেকেন্ডের scene.</h1>
+      <p>Prompt-গুলো সিরিয়াল অনুযায়ী সাজাও। প্রতিটি prompt হবে আলাদা ৫ সেকেন্ডের ভিডিওর জন্য।</p>
+    </section>
+    <div class="specs"><span class="spec">🎬 <b>৫ সেকেন্ড</b> প্রতি prompt</span><span class="spec">▤ সর্বোচ্চ
+        <b>৬টি</b> prompt</span><span class="spec">Aa <b>২০০ অক্ষর</b> প্রতি prompt</span></div>
+    <section aria-labelledby="promptHeading">
+      <div class="section-head">
+        <h2 id="promptHeading">তোমার prompt-গুলো</h2>
+        <div class="counter"><strong id="count">0</strong> / 6</div>
+      </div>
+      <div class="cards" id="cards"></div>
+      <div class="controls"><button class="add" id="addBtn" type="button">＋ আরেকটি prompt</button><span
+          class="limit-note">সর্বোচ্চ ৬টি · ক্রম অনুযায়ী চলবে</span></div>
+    </section>
+    <section class="runbox">
+      <div class="run-copy"><strong>সব ঠিক আছে? শুরু করা যাক</strong><span>Run চাপলে prompt যাচাই করে ফোন pair করার ধাপ
+          দেখাবে।</span></div><button class="run" id="runBtn" type="button">Run prompts&nbsp; →</button>
+    </section>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <section class="pair-panel" id="pairPanel" aria-live="polite">
+      <div class="pair-head">
+        <div>
+          <h2>এবার ফোন pair করো</h2>
+          <p><span id="pairCount">0</span>টি prompt ফোনে পাঠানোর জন্য প্রস্তুত।</p>
+        </div><span class="pair-tag">PAIR PHONE</span>
+      </div>
+      <div class="qr-wrap">
+        <div class="qr-frame" id="qrCode"><span style="color:#333;font-size:12px">QR তৈরি হচ্ছে…</span></div>
+        <div class="qr-instructions">
+          <strong>QR scan করো অথবা Numeric Code টাইপ করো</strong><br>
+          স্ক্যান করতে সমস্যা হলে নিচের ৬ ডিজিটের কোডটি অ্যাপে টাইপ করো।
+          <div class="code-box">
+            <div>
+              <div style="font-size:10px;color:var(--muted)">PAIRING CODE</div>
+              <div class="code-display" id="pairingCodeText">000000</div>
+            </div>
+            <button class="copy-code-btn" id="copyCodeBtn" type="button">Copy Code</button>
+          </div>
+        </div>
+      </div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><span>RYNTRIQ Helper app-এ QR scan করো অথবা ৬ ডিজিটের কোড দাও।</span></li>
+        <li><span class="step-num">2</span><span>Accessibility service অন করে ইউটিউব অটোমেশন শুরু করো।</span></li>
+      </ol>
+      <div class="pair-actions"><button class="secondary" id="editPrompts" type="button">← Prompt-এ ফিরে যাও</button>
+      </div>
+    </section>
+    <footer class="footer"><span>Draft এই browser-এ স্বয়ংক্রিয়ভাবে save হয়।</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const MAX = 6, LIMIT = 200, KEY = 'ryntriq-prompts-v1';
+    const cards = document.getElementById('cards'), count = document.getElementById('count'), addBtn = document.getElementById('addBtn'), runBtn = document.getElementById('runBtn'), statusBox = document.getElementById('status'), toast = document.getElementById('toast'), pairPanel = document.getElementById('pairPanel');
+    let prompts = [];
+    try { const saved = JSON.parse(localStorage.getItem(KEY) || '[]'); if (Array.isArray(saved)) prompts = saved.slice(0, MAX).map(x => String(x).slice(0, LIMIT)); } catch { }
+    if (!prompts.length) prompts = [''];
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(prompts)); } catch { } }
+    function showToast(message) { toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1900) }
+    function render(focusIndex = -1) { cards.innerHTML = ''; prompts.forEach((value, i) => { const card = document.createElement('article'); card.className = 'card'; const top = document.createElement('div'); top.className = 'card-top'; const label = document.createElement('div'); label.className = 'card-label'; const num = document.createElement('span'); num.className = 'num'; num.textContent = String(i + 1).padStart(2, '0'); const title = document.createElement('span'); title.textContent = `Prompt ${i + 1}`; label.append(num, title); const duration = document.createElement('span'); duration.className = 'duration'; duration.textContent = '৫ সেকেন্ড'; top.append(label, duration); const area = document.createElement('textarea'); area.maxLength = LIMIT; area.placeholder = 'যেমন: বৃষ্টিভেজা শহরে নীল আলোয় একটি ছোট রোবট হাঁটছে…'; area.value = value; area.setAttribute('aria-label', `Prompt ${i + 1}`); const bottom = document.createElement('div'); bottom.className = 'card-bottom'; const hint = document.createElement('span'); hint.className = 'hint'; hint.textContent = 'একটি scene পরিষ্কারভাবে বর্ণনা করো'; const right = document.createElement('div'); right.style.display = 'flex'; right.style.alignItems = 'center'; const chars = document.createElement('span'); chars.className = 'chars'; chars.textContent = `${value.length} / ${LIMIT}`; const remove = document.createElement('button'); remove.className = 'remove'; remove.type = 'button'; remove.textContent = 'মুছুন'; remove.setAttribute('aria-label', `Prompt ${i + 1} মুছুন`); remove.addEventListener('click', () => { prompts.splice(i, 1); if (!prompts.length) prompts.push(''); save(); render() }); right.append(chars); if (prompts.length > 1) right.append(remove); bottom.append(hint, right); area.addEventListener('input', () => { prompts[i] = area.value; chars.textContent = `${area.value.length} / ${LIMIT}`; chars.classList.toggle('over', area.value.length > LIMIT); save(); update() }); card.append(top, area, bottom); cards.append(card) }); count.textContent = String(prompts.filter(x => x.trim()).length); addBtn.disabled = prompts.length >= MAX; update(); if (focusIndex >= 0) { const area = cards.children[focusIndex]?.querySelector('textarea'); area?.focus() } }
+    function update() { const filled = prompts.filter(x => x.trim()); runBtn.disabled = !filled.length || filled.length !== prompts.length; count.textContent = String(filled.length) }
+    addBtn.addEventListener('click', () => { if (prompts.length >= MAX) return; prompts.push(''); save(); render(prompts.length - 1) });
+
+    runBtn.addEventListener('click', async () => {
+      const empty = prompts.findIndex(x => !x.trim());
+      if (empty >= 0) { statusBox.className = 'status show error'; statusBox.textContent = `Prompt ${empty + 1} খালি আছে—লিখে নাও অথবা মুছে দাও।`; cards.children[empty]?.querySelector('textarea')?.focus(); return }
+      save(); runBtn.disabled = true; runBtn.textContent = 'তৈরি হচ্ছে…';
+      try {
+        if (!window.QRCode) throw new Error('QR library load হয়নি।');
+        const validPrompts = prompts.filter(p => p.trim());
+
+        const numericCode = Math.floor(100000 + Math.random() * 900000).toString();
+        document.getElementById('pairingCodeText').textContent = numericCode;
+
+        const payload = JSON.stringify({ v: 1, code: numericCode, prompts: validPrompts });
+
+        const target = document.getElementById('qrCode');
+        target.innerHTML = '';
+        new QRCode(target, { text: payload, width: 180, height: 180, colorDark: '#10131c', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+
+        document.getElementById('pairCount').textContent = String(validPrompts.length);
+        pairPanel.classList.add('show');
+        pairPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        statusBox.className = 'status';
+      } catch (error) {
+        statusBox.className = 'status show error';
+        statusBox.textContent = `তৈরি হয়নি: ${error.message}`;
+      } finally {
+        runBtn.disabled = false;
+        runBtn.textContent = 'Run prompts  →';
+      }
+    });
+
+    document.getElementById('copyCodeBtn').addEventListener('click', () => {
+      const codeText = document.getElementById('pairingCodeText').textContent;
+      navigator.clipboard.writeText(codeText).then(() => showToast('Pairing code copy hoyeche!'));
+    });
+
+    document.getElementById('editPrompts').addEventListener('click', () => { pairPanel.classList.remove('show'); document.getElementById('promptHeading').scrollIntoView({ behavior: 'smooth', block: 'start' }) });
+    render();
+  </script>
+</body>
+
+</html>
